@@ -1,23 +1,21 @@
-import logo from './logo.svg';
 import './App.css';
+import WeekDays from './Components/WeekDays/WeekDays'
+import Forecast1Day from "./Components/Forecast1Day/Forecast1Day"
+import {useEffect, useState} from "react";
 
 function App() {
+    const [weeklyForecast, setWeeklyForecast] = useState();
+    useEffect(() => {
+        fetch('https://netcraft2.s3-eu-west-1.amazonaws.com/weather.json')
+            .then(res => res.json())
+            .then(data => setWeeklyForecast(data));
+    }, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <section className="weekly-forecast">
+            {weeklyForecast && weeklyForecast.map(dailyForecast => <Forecast1Day {...dailyForecast}/>)}
+        </section>
     </div>
   );
 }
